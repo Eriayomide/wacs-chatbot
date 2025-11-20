@@ -365,8 +365,8 @@
                 <div class="header-info">
                     <h1>Gwen - WACS Support</h1>
                     <p>
-                        <span class="connection-status disconnected" id="connection-status"></span>
-                        <span id="status-text">Connecting...</span>
+                        <span class="connection-status" id="connection-status"></span>
+                        <span id="status-text">Online</span>
                     </p>
                 </div>
             </div>
@@ -477,7 +477,7 @@
             avatarDiv.className = 'bot-avatar';
             avatarDiv.innerHTML = `
                 <img src="${AVATAR_IMAGE}" alt="Gwen" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                <div class="bot-avatar-fallback" style="display: none;">A</div>
+                <div class="bot-avatar-fallback" style="display: none;">G</div>
             `;
             typingDiv.appendChild(avatarDiv);
             
@@ -556,13 +556,6 @@
             const message = input.value.trim();
             
             if (!message) return;
-            
-            // Check connection status before sending
-            const statusText = document.getElementById('status-text').textContent;
-            if (statusText === 'Offline' || statusText === 'Connecting...') {
-                addMessage('bot', '❌ Cannot connect to server. Please check if the backend is running or refresh the page to reconnect.');
-                return;
-            }
             
             // Disable input while sending
             input.disabled = true;
@@ -684,14 +677,7 @@
         async function testConnection() {
             try {
                 console.log(`🔍 Testing connection to ${API_BASE_URL}/health`);
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
-                
-                const response = await fetch(`${API_BASE_URL}/health`, {
-                    signal: controller.signal
-                });
-                clearTimeout(timeoutId);
-                
+                const response = await fetch(`${API_BASE_URL}/health`);
                 const data = await response.json();
                 console.log('✅ Server is reachable:', data);
                 updateConnectionStatus(true);
@@ -699,9 +685,7 @@
             } catch (error) {
                 console.error('❌ Cannot reach server:', error);
                 updateConnectionStatus(false);
-                
-                // Show offline message to user
-                addMessage('bot', '❌ Cannot connect to server. Please ensure the backend is running at ' + API_BASE_URL);
+                // No system message - just update connection status indicator
                 return false;
             }
         }
@@ -716,7 +700,7 @@
 
         // 🆕 UPDATED: Initial greeting and connection test with conversation restore
         window.addEventListener('load', async function() {
-            // Test connection first (will show error message if offline)
+            // Test connection first
             const connected = await testConnection();
             
             if (connected) {
@@ -730,7 +714,7 @@
                     }, 500);
                 }
             }
-            // If not connected, error message already shown by testConnection()
+            // If not connected, just show offline status indicator - no messages
         });
 
         // Log conversation ID for debugging
