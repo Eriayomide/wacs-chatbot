@@ -20,7 +20,7 @@ RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTr
 
 # Copy all project files
 COPY wacs-backend/ ./
-COPY wacs-frontend/ ./
+wacs-frontend/ ./frontend/
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
