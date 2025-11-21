@@ -624,7 +624,7 @@ def chat():
                 conversation_manager.set_user_name(conversation_id, extracted_name)
                 user_name = extracted_name
                 # Acknowledge the name and ask how to help
-                response = f"Hello {user_name}! Nice to meet you 😊 How can I help you with WACS or IPPIS today?"
+                response = f"Hello {user_name}! Nice to meet you 😊 How can I help you today?"
                 processed_response = rag_system.hyperlink_processor.convert_to_hyperlinks(response)
                 
                 # 🆕 Store the bot's greeting in history
