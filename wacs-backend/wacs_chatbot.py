@@ -132,7 +132,8 @@ wacs_faqs = [
     },
     {
         "question": 'How can I get a Letter of Non-Indebtedness?',
-        "answer": 'You can obtain a letter by contacting or visiting the financial institution to which you are indebted.',
+        "answer": ' Kindly contact the microfinance bank you are indebted to for a letter of non indebtedness. For deductions under WACS, the description on your payslip begins with “WACS” followed by the name of the financial institution. Kindly send your letter of non-indebtedness to support@wacs.com.ng.
+For Cooperative deductions, these appear on your payslip and are labeled as “COOP.” and “CTLS” Kindly send your letter of non-indebtedness to your desk officer to effect stoppage.    ',
         "category": 'loan_management'
     },
     {
@@ -290,6 +291,7 @@ wacs_faqs = [
         "answer": 'Review your payslip to verify all deduction amounts. However, you can direct your complaint to your financial institution.',
         "category": 'loan_deductions'
     }
+    
 ]
 
 class HyperlinkProcessor:
