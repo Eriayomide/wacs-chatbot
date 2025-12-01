@@ -24,11 +24,11 @@ COPY wacs-frontend/ ./frontend/
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
-ENV PORT=8080
+ENV PORT=8081
 # ENV SENTENCE_TRANSFORMERS_HOME=/root/.cache/torch/sentence_transformers
 
 # Expose port
-EXPOSE 8080
+EXPOSE 8081
 
 # Start the application
 CMD ["python", "wacs_chatbot.py"]

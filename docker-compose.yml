@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  backend:
+    build: ./wacs-backend
+    container_name: wacs-backend
+    ports:
+      - "8081:8081"
+    env_file:
+      - ./wacs-backend/.env
+    restart: unless-stopped
+
+  frontend:
+    build: ./wacs-frontend
+    container_name: wacs-frontend
+    ports:
+      - "8001:80"
+    restart: unless-stopped
