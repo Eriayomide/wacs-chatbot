@@ -131,11 +131,15 @@ wacs_faqs = [
         "category": 'general'
     },
     {
-        "question": 'How can I get a Letter of Non-Indebtedness?',
-        "answer": ' Kindly contact the microfinance bank you are indebted to for a letter of non indebtedness. For deductions under WACS, the description on your payslip begins with “WACS” followed by the name of the financial institution. Kindly send your letter of non-indebtedness to support@wacs.com.ng.
-For Cooperative deductions, these appear on your payslip and are labeled as “COOP.” and “CTLS” Kindly send your letter of non-indebtedness to your desk officer to effect stoppage.    ',
-        "category": 'loan_management'
-    },
+    "question": "How can I get a Letter of Non-Indebtedness?",
+    "answer": """Kindly contact the microfinance bank you are indebted to for a letter of non-indebtedness. 
+For deductions under WACS, the description on your payslip begins with "WACS" followed by the name of the financial institution. 
+Kindly send your letter of non-indebtedness to support@wacs.com.ng.
+For Cooperative deductions, these appear on your payslip and are labeled as "COOP." and "CTLS". 
+Kindly send your letter of non-indebtedness to your desk officer to effect stoppage.""",
+    "category": "loan_management"
+}
+,
     {
         "question": 'Does IPPIS give out loans?',
         "answer": 'No, IPPIS does not issue loans. However, you can visit the IPPIS-OAGF application to request a loan from any financial institution with the loan product that suits your needs.',
