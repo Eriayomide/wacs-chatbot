@@ -1,725 +1,778 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WACS Chatbot - Support Assistant</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
 
-        .chat-container {
-            width: 90%;
-            max-width: 600px;
-            height: 90vh;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
+      .chat-container {
+        width: 90%;
+        max-width: 600px;
+        height: 90vh;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
 
-        .chat-header {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+      .chat-header {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
 
-        .avatar-container {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+      .avatar-container {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
-        .avatar-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+      .avatar-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 
-        /* Fallback avatar with initials */
-        .avatar-fallback {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            font-size: 20px;
-            font-weight: bold;
-        }
+      /* Fallback avatar with initials */
+      .avatar-fallback {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        font-size: 20px;
+        font-weight: bold;
+      }
 
-        .header-info h1 {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 3px;
-        }
+      .header-info h1 {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 3px;
+      }
 
-        .header-info p {
-            font-size: 12px;
-            opacity: 0.9;
-        }
+      .header-info p {
+        font-size: 12px;
+        opacity: 0.9;
+      }
 
-        .connection-status {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #4ade80;
-            margin-right: 5px;
-            animation: pulse 2s infinite;
-        }
+      .connection-status {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #4ade80;
+        margin-right: 5px;
+        animation: pulse 2s infinite;
+      }
 
-        .connection-status.disconnected {
-            background: #ef4444;
-        }
+      .connection-status.disconnected {
+        background: #ef4444;
+      }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
         }
-
-        .reset-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
+        50% {
+          opacity: 0.5;
         }
+      }
 
-        .reset-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
+      .reset-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        padding: 8px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.3s;
+      }
+
+      .reset-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      .messages-container {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+
+      .message {
+        margin-bottom: 15px;
+        display: flex;
+        animation: slideIn 0.3s ease;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
         }
-
-        .messages-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            background: #f5f5f5;
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
+      }
 
-        .message {
-            margin-bottom: 15px;
-            display: flex;
-            animation: slideIn 0.3s ease;
+      .message.user {
+        justify-content: flex-end;
+      }
+
+      .message.bot {
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .message.system {
+        justify-content: center;
+      }
+
+      .bot-avatar {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        overflow: hidden;
+        flex-shrink: 0;
+        margin-top: 5px;
+        border: 2px solid #10b981;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .bot-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .bot-avatar-fallback {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+      }
+
+      .message-content {
+        max-width: 70%;
+        padding: 12px 16px;
+        border-radius: 18px;
+        word-wrap: break-word;
+      }
+
+      .message.user .message-content {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border-bottom-right-radius: 4px;
+      }
+
+      .message.bot .message-content {
+        background: white;
+        color: #333;
+        border-bottom-left-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .message.system .message-content {
+        background: #fef3c7;
+        color: #92400e;
+        font-size: 12px;
+        max-width: 90%;
+      }
+
+      /* 🎨 Style for links in bot messages */
+      .message-content a {
+        color: #0066cc;
+        text-decoration: underline;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+
+      .message-content a:hover {
+        color: #0052a3;
+        text-decoration: underline;
+      }
+
+      /* Style for bold text */
+      .message-content strong {
+        font-weight: 600;
+        color: #1a1a1a;
+      }
+
+      /* Typing indicator */
+      .typing-indicator {
+        padding: 12px 16px;
+        border-radius: 18px;
+        background: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        display: inline-flex;
+        gap: 4px;
+      }
+
+      .typing-indicator span {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #10b981;
+        animation: typing 1.4s infinite;
+      }
+
+      .typing-indicator span:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      .typing-indicator span:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+
+      @keyframes typing {
+        0%,
+        60%,
+        100% {
+          transform: translateY(0);
         }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        30% {
+          transform: translateY(-10px);
         }
+      }
 
-        .message.user {
-            justify-content: flex-end;
-        }
+      .input-container {
+        padding: 20px;
+        background: white;
+        border-top: 1px solid #e5e7eb;
+      }
 
-        .message.bot {
-            justify-content: flex-start;
-            align-items: flex-start;
-            gap: 10px;
-        }
+      .input-wrapper {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
 
-        .message.system {
-            justify-content: center;
-        }
+      #user-input {
+        flex: 1;
+        padding: 12px 16px;
+        border: 2px solid #e5e7eb;
+        border-radius: 25px;
+        font-size: 14px;
+        outline: none;
+        transition: border-color 0.3s;
+      }
 
-        .bot-avatar {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            overflow: hidden;
-            flex-shrink: 0;
-            margin-top: 5px;
-            border: 2px solid #10b981;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+      #user-input:focus {
+        border-color: #10b981;
+      }
 
-        .bot-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+      #user-input:disabled {
+        background: #f9fafb;
+        cursor: not-allowed;
+      }
 
-        .bot-avatar-fallback {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            font-size: 14px;
-            font-weight: bold;
-        }
+      #send-btn {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        border: none;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.2s;
+      }
 
-        .message-content {
-            max-width: 70%;
-            padding: 12px 16px;
-            border-radius: 18px;
-            word-wrap: break-word;
-        }
+      #send-btn:hover:not(:disabled) {
+        transform: scale(1.1);
+      }
 
-        .message.user .message-content {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            border-bottom-right-radius: 4px;
-        }
+      #send-btn:active {
+        transform: scale(0.95);
+      }
 
-        .message.bot .message-content {
-            background: white;
-            color: #333;
-            border-bottom-left-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
+      #send-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
 
-        .message.system .message-content {
-            background: #fef3c7;
-            color: #92400e;
-            font-size: 12px;
-            max-width: 90%;
-        }
+      /* Scrollbar styling */
+      .messages-container::-webkit-scrollbar {
+        width: 6px;
+      }
 
+      .messages-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
 
-        /* 🎨 Style for links in bot messages */
-        .message-content a {
-            color: #0066cc;
-            text-decoration: underline;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
+      .messages-container::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 3px;
+      }
 
-        .message-content a:hover {
-            color: #0052a3;
-            text-decoration: underline;
-        }
-
-        /* Style for bold text */
-        .message-content strong {
-            font-weight: 600;
-            color: #1a1a1a;
-        }
-
-        /* Typing indicator */
-        .typing-indicator {
-            padding: 12px 16px;
-            border-radius: 18px;
-            background: white;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            display: inline-flex;
-            gap: 4px;
-        }
-
-        .typing-indicator span {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #10b981;
-            animation: typing 1.4s infinite;
-        }
-
-        .typing-indicator span:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing-indicator span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes typing {
-            0%, 60%, 100% {
-                transform: translateY(0);
-            }
-            30% {
-                transform: translateY(-10px);
-            }
-        }
-
-        .input-container {
-            padding: 20px;
-            background: white;
-            border-top: 1px solid #e5e7eb;
-        }
-
-        .input-wrapper {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        #user-input {
-            flex: 1;
-            padding: 12px 16px;
-            border: 2px solid #e5e7eb;
-            border-radius: 25px;
-            font-size: 14px;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        #user-input:focus {
-            border-color: #10b981;
-        }
-
-        #user-input:disabled {
-            background: #f9fafb;
-            cursor: not-allowed;
-        }
-
-        #send-btn {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            border: none;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s;
-        }
-
-        #send-btn:hover:not(:disabled) {
-            transform: scale(1.1);
-        }
-
-        #send-btn:active {
-            transform: scale(0.95);
-        }
-
-        #send-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* Scrollbar styling */
-        .messages-container::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .messages-container::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        .messages-container::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 3px;
-        }
-
-        .messages-container::-webkit-scrollbar-thumb:hover {
-            background: #a1a1a1;
-        }
+      .messages-container::-webkit-scrollbar-thumb:hover {
+        background: #a1a1a1;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="chat-container">
-        <!-- Header -->
-        <div class="chat-header">
-            <div class="header-left">
-                <div class="avatar-container">
-                    <img src="https://storage.googleapis.com/vreg-chatbot-assets/ada_avatar.png" alt="Gwen Avatar" 
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div class="avatar-fallback" style="display: none;">G</div>
-                </div>
-                <div class="header-info">
-                    <h1>Gwen - IPPIS Support</h1>
-                    <p>
-                        <span class="connection-status" id="connection-status"></span>
-                        <span id="status-text">Online</span>
-                    </p>
-                </div>
-            </div>
-            <button class="reset-btn" onclick="resetChat()">Reset Chat</button>
+      <!-- Header -->
+      <div class="chat-header">
+        <div class="header-left">
+          <div class="avatar-container">
+            <img
+              src="https://storage.googleapis.com/vreg-chatbot-assets/ada_avatar.png"
+              alt="Gwen Avatar"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <div class="avatar-fallback" style="display: none">G</div>
+          </div>
+          <div class="header-info">
+            <h1>Gwen - IPPIS Support</h1>
+            <p>
+              <span class="connection-status" id="connection-status"></span>
+              <span id="status-text">Online</span>
+            </p>
+          </div>
         </div>
+        <button class="reset-btn" onclick="resetChat()">Reset Chat</button>
+      </div>
 
-        <!-- Messages Container -->
-        <div class="messages-container" id="messages-container">
-            <!-- Messages will be added here dynamically -->
-        </div>
+      <!-- Messages Container -->
+      <div class="messages-container" id="messages-container">
+        <!-- Messages will be added here dynamically -->
+      </div>
 
-        <!-- Input Container -->
-        <div class="input-container">
-            <div class="input-wrapper">
-                <input type="text" id="user-input" placeholder="Type your message..." autocomplete="off">
-                <button id="send-btn" onclick="sendMessage()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="22" y1="2" x2="11" y2="13"></line>
-                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                    </svg>
-                </button>
-            </div>
+      <!-- Input Container -->
+      <div class="input-container">
+        <div class="input-wrapper">
+          <input
+            type="text"
+            id="user-input"
+            placeholder="Type your message..."
+            autocomplete="off"
+          />
+          <button id="send-btn" onclick="sendMessage()">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
         </div>
+      </div>
     </div>
 
     <script>
-        // 🌐 Configuration - Auto-detect if localhost or Cloud Run
-        const API_BASE_URL = window.location.hostname === 'localhost' 
-            ? 'http://localhost:8080' 
-            : window.location.origin;
-        
-        const AVATAR_IMAGE = 'https://storage.googleapis.com/vreg-chatbot-assets/ada_avatar.png';
-        
-        // State management
-        let conversationId = localStorage.getItem('wacs_conversation_id') || null;
-        let currentUserName = null;
+      const API_BASE_URL =
+        window.location.hostname === "localhost"
+          ? "http://localhost:8081"
+          : "http://164.92.167.87:8081";
 
-        // Update connection status indicator
-        function updateConnectionStatus(connected) {
-            const statusDot = document.getElementById('connection-status');
-            const statusText = document.getElementById('status-text');
-            
-            if (connected) {
-                statusDot.classList.remove('disconnected');
-                statusText.textContent = 'Online';
-            } else {
-                statusDot.classList.add('disconnected');
-                statusText.textContent = 'Offline';
-            }
+      const AVATAR_IMAGE =
+        "https://storage.googleapis.com/vreg-chatbot-assets/ada_avatar.png";
+
+      // State management
+      let conversationId = localStorage.getItem("wacs_conversation_id") || null;
+      let currentUserName = null;
+
+      // Update connection status indicator
+      function updateConnectionStatus(connected) {
+        const statusDot = document.getElementById("connection-status");
+        const statusText = document.getElementById("status-text");
+
+        if (connected) {
+          statusDot.classList.remove("disconnected");
+          statusText.textContent = "Online";
+        } else {
+          statusDot.classList.add("disconnected");
+          statusText.textContent = "Offline";
         }
+      }
 
-        // Add message to chat
-        function addMessage(type, content) {
-            const messagesContainer = document.getElementById('messages-container');
-            
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${type}`;
-            
-            // Add bot avatar for bot messages
-            if (type === 'bot') {
-                const avatarDiv = document.createElement('div');
-                avatarDiv.className = 'bot-avatar';
-                avatarDiv.innerHTML = `
+      // Add message to chat
+      function addMessage(type, content) {
+        const messagesContainer = document.getElementById("messages-container");
+
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `message ${type}`;
+
+        // Add bot avatar for bot messages
+        if (type === "bot") {
+          const avatarDiv = document.createElement("div");
+          avatarDiv.className = "bot-avatar";
+          avatarDiv.innerHTML = `
                     <img src="${AVATAR_IMAGE}" alt="Gwen" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     <div class="bot-avatar-fallback" style="display: none;">G</div>
                 `;
-                messageDiv.appendChild(avatarDiv);
-            }
-            
-            const messageContent = document.createElement('div');
-            messageContent.className = 'message-content';
-            messageContent.innerHTML = content;
-            
-            messageDiv.appendChild(messageContent);
-            messagesContainer.appendChild(messageDiv);
-            
-            // Scroll to bottom
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+          messageDiv.appendChild(avatarDiv);
         }
 
-        // Add system message
-        function addSystemMessage(content) {
-            const messagesContainer = document.getElementById('messages-container');
-            
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message system';
-            
-            const messageContent = document.createElement('div');
-            messageContent.className = 'message-content';
-            messageContent.textContent = content;
-            
-            messageDiv.appendChild(messageContent);
-            messagesContainer.appendChild(messageDiv);
-            
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
+        const messageContent = document.createElement("div");
+        messageContent.className = "message-content";
+        messageContent.innerHTML = content;
 
-        // Show typing indicator
-        function showTypingIndicator() {
-            const messagesContainer = document.getElementById('messages-container');
-            
-            const typingDiv = document.createElement('div');
-            typingDiv.className = 'message bot';
-            typingDiv.id = 'typing-indicator-wrapper';
-            
-            // Add avatar
-            const avatarDiv = document.createElement('div');
-            avatarDiv.className = 'bot-avatar';
-            avatarDiv.innerHTML = `
+        messageDiv.appendChild(messageContent);
+        messagesContainer.appendChild(messageDiv);
+
+        // Scroll to bottom
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+
+      // Add system message
+      function addSystemMessage(content) {
+        const messagesContainer = document.getElementById("messages-container");
+
+        const messageDiv = document.createElement("div");
+        messageDiv.className = "message system";
+
+        const messageContent = document.createElement("div");
+        messageContent.className = "message-content";
+        messageContent.textContent = content;
+
+        messageDiv.appendChild(messageContent);
+        messagesContainer.appendChild(messageDiv);
+
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+
+      // Show typing indicator
+      function showTypingIndicator() {
+        const messagesContainer = document.getElementById("messages-container");
+
+        const typingDiv = document.createElement("div");
+        typingDiv.className = "message bot";
+        typingDiv.id = "typing-indicator-wrapper";
+
+        // Add avatar
+        const avatarDiv = document.createElement("div");
+        avatarDiv.className = "bot-avatar";
+        avatarDiv.innerHTML = `
                 <img src="${AVATAR_IMAGE}" alt="Gwen" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                 <div class="bot-avatar-fallback" style="display: none;">G</div>
             `;
-            typingDiv.appendChild(avatarDiv);
-            
-            const typingContent = document.createElement('div');
-            typingContent.className = 'typing-indicator active';
-            typingContent.innerHTML = '<span></span><span></span><span></span>';
-            
-            typingDiv.appendChild(typingContent);
-            messagesContainer.appendChild(typingDiv);
-            
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        typingDiv.appendChild(avatarDiv);
+
+        const typingContent = document.createElement("div");
+        typingContent.className = "typing-indicator active";
+        typingContent.innerHTML = "<span></span><span></span><span></span>";
+
+        typingDiv.appendChild(typingContent);
+        messagesContainer.appendChild(typingDiv);
+
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+
+      // Remove typing indicator
+      function removeTypingIndicator() {
+        const typingIndicator = document.getElementById(
+          "typing-indicator-wrapper"
+        );
+        if (typingIndicator) {
+          typingIndicator.remove();
+        }
+      }
+
+      // 🆕 NEW FUNCTION: Restore conversation from backend
+      async function restoreConversation() {
+        if (!conversationId) {
+          console.log("🆕 No existing conversation found");
+          return false;
         }
 
-        // Remove typing indicator
-        function removeTypingIndicator() {
-            const typingIndicator = document.getElementById('typing-indicator-wrapper');
-            if (typingIndicator) {
-                typingIndicator.remove();
-            }
+        try {
+          console.log("🔄 Restoring conversation:", conversationId);
+
+          const response = await fetch(`${API_BASE_URL}/get-conversation`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ conversation_id: conversationId }),
+          });
+
+          const data = await response.json();
+
+          if (data.success && data.messages && data.messages.length > 0) {
+            console.log(
+              "✅ Restored conversation with",
+              data.messages.length,
+              "messages"
+            );
+
+            // Restore user name
+            currentUserName = data.user_name;
+
+            // Clear the chat messages container
+            const messagesContainer =
+              document.getElementById("messages-container");
+            messagesContainer.innerHTML = "";
+
+            // Render all messages
+            data.messages.forEach((msg) => {
+              if (msg.role === "user") {
+                addMessage("user", msg.content);
+              } else if (msg.role === "assistant") {
+                addMessage("bot", msg.content);
+              }
+            });
+
+            return true;
+          } else {
+            console.log("⚠️ No conversation history found");
+            return false;
+          }
+        } catch (error) {
+          console.error("❌ Error restoring conversation:", error);
+          return false;
+        }
+      }
+
+      // Send message to backend
+      async function sendMessage() {
+        const input = document.getElementById("user-input");
+        const sendBtn = document.getElementById("send-btn");
+        const message = input.value.trim();
+
+        if (!message) return;
+
+        // Disable input while sending
+        input.disabled = true;
+        sendBtn.disabled = true;
+
+        // Display user message
+        addMessage("user", message);
+        input.value = "";
+
+        // Show typing indicator
+        showTypingIndicator();
+
+        try {
+          console.log(`🔄 Sending request to: ${API_BASE_URL}/chat`);
+          console.log(`📤 Data:`, { message, conversation_id: conversationId });
+
+          const response = await fetch(`${API_BASE_URL}/chat`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              message: message,
+              conversation_id: conversationId,
+            }),
+          });
+
+          console.log(`📥 Response status: ${response.status}`);
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          console.log(`✅ Response data:`, data);
+
+          // Update connection status
+          updateConnectionStatus(true);
+
+          // 🆕 Store conversation ID from response
+          if (data.conversation_id) {
+            conversationId = data.conversation_id;
+            localStorage.setItem("wacs_conversation_id", conversationId);
+            console.log(`💾 Stored conversation ID: ${conversationId}`);
+          }
+
+          // Update user name if captured
+          if (data.user_name) {
+            currentUserName = data.user_name;
+            console.log(`👤 User name: ${data.user_name}`);
+          }
+
+          // Remove typing indicator
+          removeTypingIndicator();
+
+          // Display bot response
+          addMessage("bot", data.reply || data.raw_reply);
+        } catch (error) {
+          console.error("❌ Error details:", error);
+          updateConnectionStatus(false);
+          removeTypingIndicator();
+
+          // More specific error messages
+          if (
+            error.message.includes("Failed to fetch") ||
+            error.message.includes("NetworkError")
+          ) {
+            addMessage(
+              "bot",
+              `❌ Cannot connect to server. Please check your internet connection.`
+            );
+          } else if (error.message.includes("HTTP error")) {
+            addMessage(
+              "bot",
+              `❌ Server error: ${error.message}. Please try again later.`
+            );
+          } else {
+            addMessage("bot", `❌ Error: ${error.message}`);
+          }
+        } finally {
+          // Re-enable input
+          input.disabled = false;
+          sendBtn.disabled = false;
+          input.focus();
+        }
+      }
+
+      // Reset chat
+      async function resetChat() {
+        if (
+          !confirm(
+            "Are you sure you want to reset the chat? This will clear your conversation history."
+          )
+        ) {
+          return;
         }
 
-        // 🆕 NEW FUNCTION: Restore conversation from backend
-        async function restoreConversation() {
-            if (!conversationId) {
-                console.log('🆕 No existing conversation found');
-                return false;
-            }
+        try {
+          if (conversationId) {
+            console.log(`🔄 Resetting conversation: ${conversationId}`);
+            await fetch(`${API_BASE_URL}/reset-session`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                conversation_id: conversationId,
+              }),
+            });
+          }
 
-            try {
-                console.log('🔄 Restoring conversation:', conversationId);
-                
-                const response = await fetch(`${API_BASE_URL}/get-conversation`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ conversation_id: conversationId })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success && data.messages && data.messages.length > 0) {
-                    console.log('✅ Restored conversation with', data.messages.length, 'messages');
-                    
-                    // Restore user name
-                    currentUserName = data.user_name;
-                    
-                    // Clear the chat messages container
-                    const messagesContainer = document.getElementById('messages-container');
-                    messagesContainer.innerHTML = '';
-                    
-                    // Render all messages
-                    data.messages.forEach(msg => {
-                        if (msg.role === 'user') {
-                            addMessage('user', msg.content);
-                        } else if (msg.role === 'assistant') {
-                            addMessage('bot', msg.content);
-                        }
-                    });
-                    
-                    return true;
-                } else {
-                    console.log('⚠️ No conversation history found');
-                    return false;
-                }
-            } catch (error) {
-                console.error('❌ Error restoring conversation:', error);
-                return false;
-            }
+          // 🆕 Clear local storage and state
+          localStorage.removeItem("wacs_conversation_id");
+          conversationId = null;
+          currentUserName = null;
+
+          // Clear UI
+          document.getElementById("messages-container").innerHTML = "";
+
+          // Add welcome message with Gwen's introduction
+          addMessage(
+            "bot",
+            "Hello! I'm Gwen, your IPPIS support assistant. I'm here to help you with questions about payslip,deductions and all other payroll related activities."
+          );
+          console.log("✅ Chat reset successfully");
+        } catch (error) {
+          console.error("❌ Error resetting chat:", error);
+          addSystemMessage(
+            "Failed to reset chat. You can refresh the page to start fresh."
+          );
         }
+      }
 
-        // Send message to backend
-        async function sendMessage() {
-            const input = document.getElementById('user-input');
-            const sendBtn = document.getElementById('send-btn');
-            const message = input.value.trim();
-            
-            if (!message) return;
-            
-            // Disable input while sending
-            input.disabled = true;
-            sendBtn.disabled = true;
-            
-            // Display user message
-            addMessage('user', message);
-            input.value = '';
-            
-            // Show typing indicator
-            showTypingIndicator();
-            
-            try {
-                console.log(`🔄 Sending request to: ${API_BASE_URL}/chat`);
-                console.log(`📤 Data:`, { message, conversation_id: conversationId });
-                
-                const response = await fetch(`${API_BASE_URL}/chat`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        message: message,
-                        conversation_id: conversationId
-                    })
-                });
-                
-                console.log(`📥 Response status: ${response.status}`);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                console.log(`✅ Response data:`, data);
-                
-                // Update connection status
-                updateConnectionStatus(true);
-                
-                // 🆕 Store conversation ID from response
-                if (data.conversation_id) {
-                    conversationId = data.conversation_id;
-                    localStorage.setItem('wacs_conversation_id', conversationId);
-                    console.log(`💾 Stored conversation ID: ${conversationId}`);
-                }
-                
-                // Update user name if captured
-                if (data.user_name) {
-                    currentUserName = data.user_name;
-                    console.log(`👤 User name: ${data.user_name}`);
-                }
-                
-                // Remove typing indicator
-                removeTypingIndicator();
-                
-                // Display bot response
-                addMessage('bot', data.reply || data.raw_reply);
-                
-            } catch (error) {
-                console.error('❌ Error details:', error);
-                updateConnectionStatus(false);
-                removeTypingIndicator();
-                
-                // More specific error messages
-                if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-                    addMessage('bot', `❌ Cannot connect to server. Please check your internet connection.`);
-                } else if (error.message.includes('HTTP error')) {
-                    addMessage('bot', `❌ Server error: ${error.message}. Please try again later.`);
-                } else {
-                    addMessage('bot', `❌ Error: ${error.message}`);
-                }
-            } finally {
-                // Re-enable input
-                input.disabled = false;
-                sendBtn.disabled = false;
-                input.focus();
-            }
+      // Test connection on load
+      async function testConnection() {
+        try {
+          console.log(`🔍 Testing connection to ${API_BASE_URL}/health`);
+          const response = await fetch(`${API_BASE_URL}/health`);
+          const data = await response.json();
+          console.log("✅ Server is reachable:", data);
+          updateConnectionStatus(true);
+          return true;
+        } catch (error) {
+          console.error("❌ Cannot reach server:", error);
+          updateConnectionStatus(false);
+          // No system message - just update connection status indicator
+          return false;
         }
+      }
 
-        // Reset chat
-        async function resetChat() {
-            if (!confirm('Are you sure you want to reset the chat? This will clear your conversation history.')) {
-                return;
-            }
-            
-            try {
-                if (conversationId) {
-                    console.log(`🔄 Resetting conversation: ${conversationId}`);
-                    await fetch(`${API_BASE_URL}/reset-session`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            conversation_id: conversationId
-                        })
-                    });
-                }
-                
-                // 🆕 Clear local storage and state
-                localStorage.removeItem('wacs_conversation_id');
-                conversationId = null;
-                currentUserName = null;
-                
-                // Clear UI
-                document.getElementById('messages-container').innerHTML = '';
-                
-                // Add welcome message with Gwen's introduction
-                addMessage('bot', 'Hello! I\'m Gwen, your IPPIS support assistant. I\'m here to help you with questions about payslip,deductions and all other payroll related activities.');
-                console.log('✅ Chat reset successfully');
-                
-            } catch (error) {
-                console.error('❌ Error resetting chat:', error);
-                addSystemMessage('Failed to reset chat. You can refresh the page to start fresh.');
-            }
-        }
-
-        // Test connection on load
-        async function testConnection() {
-            try {
-                console.log(`🔍 Testing connection to ${API_BASE_URL}/health`);
-                const response = await fetch(`${API_BASE_URL}/health`);
-                const data = await response.json();
-                console.log('✅ Server is reachable:', data);
-                updateConnectionStatus(true);
-                return true;
-            } catch (error) {
-                console.error('❌ Cannot reach server:', error);
-                updateConnectionStatus(false);
-                // No system message - just update connection status indicator
-                return false;
-            }
-        }
-
-        // Handle Enter key
-        document.getElementById('user-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
+      // Handle Enter key
+      document
+        .getElementById("user-input")
+        .addEventListener("keypress", function (e) {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+          }
         });
 
-        // 🆕 UPDATED: Initial greeting and connection test with conversation restore
-        window.addEventListener('load', async function() {
-            // Test connection first
-            const connected = await testConnection();
-            
-            if (connected) {
-                // 🆕 Try to restore previous conversation
-                const restored = await restoreConversation();
-                
-                if (!restored) {
-                    // No previous conversation, show welcome message
-                    setTimeout(() => {
-                        addMessage('bot', 'Hello! I\'m Gwen, your IPPIS support assistant. I\'m here to help you with questions about loans, deductions, payslip and all other payroll related activities.');
-                    }, 500);
-                }
-            }
-            // If not connected, just show offline status indicator - no messages
-        });
+      // 🆕 UPDATED: Initial greeting and connection test with conversation restore
+      window.addEventListener("load", async function () {
+        // Test connection first
+        const connected = await testConnection();
 
-        // Log conversation ID for debugging
-        console.log('🔑 Initial Conversation ID:', conversationId || 'Will be generated on first message');
-        console.log('🌐 API Base URL:', API_BASE_URL);
+        if (connected) {
+          // 🆕 Try to restore previous conversation
+          const restored = await restoreConversation();
+
+          if (!restored) {
+            // No previous conversation, show welcome message
+            setTimeout(() => {
+              addMessage(
+                "bot",
+                "Hello! I'm Gwen, your IPPIS support assistant. I'm here to help you with questions about loans, deductions, payslip and all other payroll related activities."
+              );
+            }, 500);
+          }
+        }
+        // If not connected, just show offline status indicator - no messages
+      });
+
+      // Log conversation ID for debugging
+      console.log(
+        "🔑 Initial Conversation ID:",
+        conversationId || "Will be generated on first message"
+      );
+      console.log("🌐 API Base URL:", API_BASE_URL);
     </script>
-</body>
+  </body>
 </html>
