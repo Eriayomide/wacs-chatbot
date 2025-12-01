@@ -568,7 +568,7 @@ def extract_name_from_message(message: str) -> str:
         r"it's\s+(\w+)",
         r"this is\s+(\w+)",
         r"name:\s*(\w+)",
-        r"^([a-zA-Z]{2,})$"  # Single word with at least 2 letters (any case)
+        r"^([a-zA-Z]{2,}(?:\s+[a-zA-Z]{2,})?)$"  # One or two words with at least 2 letters each
     ]
     
     # Expanded list of common non-names to avoid
@@ -596,12 +596,12 @@ def extract_name_from_message(message: str) -> str:
                     potential_name.lower() not in non_names and 
                     original_word[0].isupper() and  # Original message starts with capital
                     original_word.isalpha()):  # Contains only letters
-                    return potential_name.capitalize()
+                    return potential_name.title()
             else:
                 # For explicit patterns like "my name is", be less strict
                 if (len(potential_name) >= 2 and 
                     potential_name.lower() not in non_names):
-                    return potential_name.capitalize()
+                    return potential_name.title()
     
     return None
 
