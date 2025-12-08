@@ -520,7 +520,7 @@ LOAN DEDUCTION TYPES:
             # ✅ UPDATED: Changed to Anthropic API format
             response = client.messages.create(
                 model="claude-sonnet-4-5-20250929",  # ✅ Using Claude Sonnet 4.5
-                max_tokens=350,  # ✅ Limit for concise responses
+                max_tokens=300,  # ✅ Limit for concise responses
                 temperature=0.7,  # ✅ Natural, conversational tone
                 system=system_prompt,  # ✅ System prompt separate in Anthropic
                 messages=messages
